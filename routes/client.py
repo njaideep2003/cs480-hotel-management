@@ -144,8 +144,8 @@ def search():
                              SELECT 1 FROM booking b
                              WHERE b.hotel_id    = r.hotel_id
                                AND b.room_number = r.room_number
-                               AND daterange(b.start_date, b.end_date, \'[]\')
-                                   && daterange(%s::date, %s::date, \'[]\')
+                               AND daterange(b.start_date, b.end_date, '[]')
+                                   && daterange(%s::date, %s::date, '[]')
                          )
                          ORDER BY h.name, r.room_number''', (start, end))
     return render_template('client/search.html', rooms=rooms, start=start, end=end)
@@ -207,8 +207,8 @@ def autobook():
                                    SELECT 1 FROM booking b
                                    WHERE b.hotel_id    = r.hotel_id
                                      AND b.room_number = r.room_number
-                                     AND daterange(b.start_date, b.end_date, \'[]\')
-                                         && daterange(%s::date, %s::date, \'[]\')
+                                     AND daterange(b.start_date, b.end_date, '[]')
+                                         && daterange(%s::date, %s::date, '[]')
                                )
                              LIMIT 1''', (hotel_id, start, end))
 
@@ -247,8 +247,8 @@ def autobook():
                                           SELECT 1 FROM booking b
                                           WHERE b.hotel_id    = r.hotel_id
                                             AND b.room_number = r.room_number
-                                            AND daterange(b.start_date, b.end_date, \'[]\')
-                                                && daterange(%s::date, %s::date, \'[]\')
+                                            AND daterange(b.start_date, b.end_date, '[]')
+                                                && daterange(%s::date, %s::date, '[]')
                                       )
                                     ORDER BY h.name''', (hotel_id, start, end))
             flash('No rooms available at that hotel for those dates.', 'error')

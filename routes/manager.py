@@ -243,7 +243,7 @@ def problematic_hotels():
                     FROM hotel h
                     JOIN review  r ON r.hotel_id = h.hotel_id
                     JOIN booking b ON b.hotel_id = h.hotel_id
-                    WHERE h.city = \'Chicago\'
+                    WHERE h.city = 'Chicago'
                     GROUP BY h.hotel_id, h.name
                     HAVING AVG(r.rating) < 2
                        AND COUNT(DISTINCT b.client_email) >= 2
@@ -251,7 +251,7 @@ def problematic_hotels():
                            SELECT 1 FROM booking b2
                            JOIN client_address ca ON ca.client_email = b2.client_email
                            WHERE b2.hotel_id = h.hotel_id
-                             AND ca.city = \'Chicago\'
+                             AND ca.city = 'Chicago'
                        )
                     ORDER BY avg_rating''')
     return render_template('manager/problematic_hotels.html', rows=rows)
