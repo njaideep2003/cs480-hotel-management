@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 from db import query, get_db
 import psycopg2
 from functools import wraps
+from datetime import date
 
 client_bp = Blueprint('client', __name__)
 
@@ -136,6 +137,12 @@ def search():
     if request.method == 'POST':
         start = request.form['start_date']
         end   = request.form['end_date']
+        if start < str(date.today()):
+            flash('Start date cannot be in the past.', 'error')
+            return render_template('client/search.html', rooms=[], start=start, end=end)
+        if end < start:
+            flash('End date must be on or after start date.', 'error')
+            return render_template('client/search.html', rooms=[], start=start, end=end)
         rooms = query('''SELECT r.hotel_id, h.name AS hotel_name, r.room_number,
                                 r.num_windows, r.access_type, r.last_renovation_year
                          FROM room r
@@ -198,6 +205,13 @@ def autobook():
         hotel_id = int(request.form['hotel_id'])
         start    = request.form['start_date']
         end      = request.form['end_date']
+
+        if start < str(date.today()):
+            flash('Start date cannot be in the past.', 'error')
+            return render_template('client/autobook.html', hotels=hotels, result=None, alternatives=[])
+        if end < start:
+            flash('End date must be on or after start date.', 'error')
+            return render_template('client/autobook.html', hotels=hotels, result=None, alternatives=[])
 
         # Find first available room in requested hotel
         available = query('''SELECT r.room_number
