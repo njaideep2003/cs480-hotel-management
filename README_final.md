@@ -1,105 +1,132 @@
-# CS480 Hotel Management App
 
-A Flask + PostgreSQL web application for the CS480 hotel management project.
+# cs480-hotel-management
 
+A hotel management database system built for CS480 (Database Systems) at UIC.  
+This repository contains the ER model and relational schema for the project.
+ 
 ---
+ 
+## Project Overview
+ 
+The system supports two roles — **managers** and **clients**.
+ 
+- **Managers** can add/remove hotels and rooms, manage clients, and run reports
+- **Clients** can search available rooms, make bookings, manage addresses and credit cards, and write reviews
 
-## Setup (do this once)
+## Phase 1 — ER Model (`final_ER.pdf`)
 
-### 1. Create and activate a virtual environment
+For Phase 1, we created an ER diagram based on the given entities, attributes, and their relationships.  
+The initial version of the ER diagram had some issues, which were identified through feedback from the professor.  
+
+We revised the diagram accordingly, and the updated version is provided here:  
+[final_ER.pdf](final_ER.pdf)
+
+
+## Phase 2 — Relational Schema (`hotel_schema.sql`)
+
+For Phase 2, we translated the ER model into a relational schema using PostgreSQL.
+
+- The final schema implementation is available here:  
+  [hotel_schema.sql](hotel_schema.sql)
+
+- We also created a test script to validate the correctness of the schema and ensure that all constraints and business rules are properly enforced:  
+  [hotel_run_tests.sql](hotel_run_tests.sql)
+
+The test results confirm that the schema behaves as expected and satisfies all specified requirements.
+
+## Prerequisites
+ 
+- [PostgreSQL](https://www.postgresql.org/) installed  
+- On Mac: [Postgres.app](https://postgresapp.com/) is recommended  
+- Terminal access to `psql`
+### Set up psql on Mac (Postgres.app)
+ 
 ```bash
-cd hotel_app
-python3 -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+sudo mkdir -p /etc/paths.d
+echo /Applications/Postgres.app/Contents/Versions/latest/bin | sudo tee /etc/paths.d/postgresapp
 ```
-
-### 2. Install dependencies
+ 
+Then close and reopen Terminal. Verify with:
+ 
 ```bash
-pip install -r requirements.txt
+psql --version
 ```
-
-### 3. Set up the database
-In psql (or pgAdmin), create a database and run your schema:
+ 
+---
+ 
+## How to Run
+ 
+### Step 1 — Create the database
+ 
+```bash
+psql postgres
+```
+ 
+Inside psql:
+ 
 ```sql
-CREATE DATABASE hotel_db;
-\c hotel_db
-\i /path/to/hotel_schema.sql
+CREATE DATABASE hotel_cs480;
+\q
 ```
-
-### 4. Configure your database connection
-Open `app.py` and update the five lines under `app.config.update(...)`:
-```python
-DB_NAME='hotel_db',       # your database name
-DB_USER='postgres',        # your postgres username
-DB_PASSWORD='postgres',    # your postgres password
-DB_HOST='localhost',
-DB_PORT=5432,
-```
-
-### 5. Run the app
+ 
+### Step 2 — Load the schema
+ 
 ```bash
-python app.py
+psql -d hotel_cs480 -f hotel_schema.sql
 ```
-Then open http://127.0.0.1:5000 in your browser.
-
+ 
+Expected output:
+```
+BEGIN
+CREATE EXTENSION
+CREATE TABLE       (x9)
+ALTER TABLE
+CREATE FUNCTION    (x3)
+CREATE TRIGGER     (x5)
+COMMIT
+```
+ 
+### Step 3 — Run constraint tests
+ 
+```bash
+psql -d hotel_cs480 -f hotel_run_tests.sql
+```
+ 
+All 10 tests should print `PASS`.
+ 
+### Step 4 — Run full verification (optional)
+ 
+```bash
+psql -d hotel_cs480 -f hotel_full_verify.sql
+```
+ 
+This runs the schema, all constraint tests, structural checks, and all spec queries in one shot.
+ 
+### Reset and rerun from scratch
+ 
+```bash
+psql -d hotel_cs480 -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+psql -d hotel_cs480 -f hotel_schema.sql
+psql -d hotel_cs480 -f hotel_run_tests.sql
+```
+ 
 ---
 
-## Project structure
-```
-hotel_app/
-├── app.py                  # App factory, config, blueprint registration
-├── db.py                   # Database connection + query helper
-├── requirements.txt
-├── routes/
-│   ├── auth.py             # Login, logout, registration (manager + client)
-│   ├── manager.py          # All §4.1 manager features
-│   └── client.py           # All §4.2 client features
-└── templates/
-    ├── base.html           # Shared layout, nav, flash messages
-    ├── login.html
-    ├── register_manager.html
-    ├── register_client.html
-    ├── manager/
-    │   ├── dashboard.html
-    │   ├── hotels.html / hotel_form.html
-    │   ├── rooms.html  / room_form.html
-    │   ├── clients.html
-    │   ├── top_clients.html
-    │   ├── hotel_summary.html
-    │   ├── city_query.html
-    │   ├── problematic_hotels.html
-    │   └── client_spending.html
-    └── client/
-        ├── dashboard.html
-        ├── profile.html
-        ├── search.html
-        ├── autobook.html
-        ├── bookings.html
-        └── reviews.html
-```
-
-## Feature coverage
-
-### Manager (§4.1)
-| # | Feature | Route |
-|---|---------|-------|
-| 1 | Register + login by SSN | `/register/manager`, `/login` |
-| 2 | Insert / update / delete hotels and rooms | `/manager/hotels`, `/manager/rooms` |
-| 3 | Remove clients | `/manager/clients` |
-| 4 | Top-k clients by bookings | `/manager/stats/top-clients` |
-| 5 | All rooms with booking counts | `/manager/rooms` |
-| 6 | Per-hotel bookings + avg rating | `/manager/stats/hotel-summary` |
-| 7 | City C1/C2 client query | `/manager/stats/city-query` |
-| 8 | Problematic Chicago hotels | `/manager/stats/problematic-hotels` |
-| 9 | Client total spending | `/manager/stats/client-spending` |
-
-### Client (§4.2)
-| # | Feature | Route |
-|---|---------|-------|
-| 1 | Register with address + card, login by email | `/register/client`, `/login` |
-| 2 | Update name, addresses, credit cards | `/client/profile` |
-| 3 | Search available rooms by date range | `/client/search` |
-| 4 | Book a specific room | `/client/search` (Book button) |
-| 5 | Auto-book + alternative suggestions | `/client/autobook` |
-| 6 | View all bookings with cost | `/client/bookings` |
-| 7 | Submit review (completed stays only) | `/client/reviews` |
+## Test Results
+ 
+All 10 constraint tests verified:
+ 
+| Test | Constraint tested | Result |
+|---|---|---|
+| A | Overlapping booking (same room) | ✅ PASS |
+| B | Exact same date range overlap | ✅ PASS |
+| C | Review without prior stay | ✅ PASS |
+| D | Rating > 10 | ✅ PASS |
+| E | Rating < 0 | ✅ PASS |
+| F | Invalid access_type | ✅ PASS |
+| G | Client min-address trigger exists (deferrable) | ✅ PASS |
+| H | Client min-credit-card trigger exists (deferrable) | ✅ PASS |
+| I | Room referencing non-existent hotel | ✅ PASS |
+| J | end_date before start_date | ✅ PASS |
+ 
+Tests G and H were additionally verified manually at the `psql` prompt by committing transactions without addresses/cards — both correctly failed at `COMMIT` time.
