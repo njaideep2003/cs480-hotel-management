@@ -4,43 +4,80 @@ A Flask + PostgreSQL web application for the CS480 hotel management project.
 
 ---
 
-## Setup (do this once)
+## Prerequisites
 
-### 1. Create and activate a virtual environment
+- [Postgres.app](https://postgresapp.com/) — download, install, and click **Start** to run the server
+- Python 3 installed
+
+---
+
+## First-time setup
+
+### 1. Add psql to your terminal path
 ```bash
-cd hotel_app
-python3 -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+sudo mkdir -p /etc/paths.d
+echo /Applications/Postgres.app/Contents/Versions/latest/bin | sudo tee /etc/paths.d/postgresapp
+```
+Close and reopen Terminal, then verify:
+```bash
+psql --version
 ```
 
-### 2. Install dependencies
+### 2. Create the database
+```bash
+psql postgres
+```
+Inside psql:
+```sql
+CREATE USER postgres WITH PASSWORD 'postgres123';
+CREATE DATABASE hotel_db OWNER postgres;
+GRANT ALL PRIVILEGES ON DATABASE hotel_db TO postgres;
+\q
+```
+
+### 3. Load the schema
+```bash
+psql -U postgres -d hotel_db -f hotel_schema_1.sql
+```
+Expected output:
+```
+BEGIN
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+COMMIT
+```
+
+### 4. Create and activate a virtual environment
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 5. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Set up the database
-In psql (or pgAdmin), create a database and run the schema:
-```sql
-CREATE DATABASE hotel_db;
-\c hotel_db
-\i /path/to/hotel_schema_1.sql
-```
-
-### 4. Configure your database connection
-Open `app.py` and update the five lines under `app.config.update(...)`:
-```python
-DB_NAME='hotel_db',
-DB_USER='postgres',
-DB_PASSWORD='postgres123',
-DB_HOST='localhost',
-DB_PORT=5432,
-```
-
-### 5. Run the app
+### 6. Run the app
 ```bash
 python app.py
 ```
 Then open http://127.0.0.1:5000 in your browser.
+
+---
+
+## Reset the database (wipe all data and reload fresh)
+```bash
+psql -U postgres -d hotel_db -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+psql -U postgres -d hotel_db -f hotel_schema_1.sql
+```
 
 ---
 
