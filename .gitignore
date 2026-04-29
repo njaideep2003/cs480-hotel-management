@@ -1,1 +1,17 @@
+
+# Python virtual environment
+venv/
+.env/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS files
 .DS_Store
+
+.vscode
+node_modules*:Zone.Identifier
+*_Zone.Identifier

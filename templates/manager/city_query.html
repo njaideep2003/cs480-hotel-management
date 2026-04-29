@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}City Query{% endblock %}
+{% block content %}
+<h1>City Query</h1>
+<p style="color:var(--muted); margin-top:-.75rem; margin-bottom:1.5rem; font-size:.9rem;">
+  Find clients with an address in city C1 who have booked a hotel in city C2.
+</p>
+<div class="card" style="max-width:480px;">
+  <form method="POST" style="display:flex; gap:1rem; align-items:flex-end; flex-wrap:wrap;">
+    <div class="field" style="flex:1; min-width:140px;">
+      <label>City C1 (client address)</label>
+      <input type="text" name="c1" required placeholder="e.g. Chicago" value="{{ request.form.c1 or '' }}">
+    </div>
+    <div class="field" style="flex:1; min-width:140px;">
+      <label>City C2 (hotel location)</label>
+      <input type="text" name="c2" required placeholder="e.g. New York" value="{{ request.form.c2 or '' }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+</div>
+{% if results is defined %}
+  {% if results %}
+    <div class="card" style="padding:0; overflow:hidden;">
+      <table>
+        <thead><tr><th>Name</th><th>Email</th></tr></thead>
+        <tbody>
+        {% for r in results %}
+          <tr><td>{{ r.name }}</td><td>{{ r.email }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% elif request.method == 'POST' %}
+    <p style="color:var(--muted);">No clients matched that criteria.</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

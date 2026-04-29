@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit' if room else 'Add' }} Room{% endblock %}
+{% block content %}
+<h1>{{ 'Edit' if room else 'Add' }} Room</h1>
+<div class="card" style="max-width:520px;">
+  <form method="POST">
+    <div class="form-grid" style="margin-bottom:1rem;">
+      <div class="field">
+        <label>Hotel</label>
+        <select name="hotel_id" {% if room %}disabled{% endif %} required>
+          {% for h in hotels %}
+            <option value="{{ h.hotel_id }}" {{ 'selected' if room and room.hotel_id == h.hotel_id }}>{{ h.name }}</option>
+          {% endfor %}
+        </select>
+        {% if room %}<input type="hidden" name="hotel_id" value="{{ room.hotel_id }}">{% endif %}
+      </div>
+      {% if not room %}
+      <div class="field">
+        <label>Room number</label>
+        <input type="number" name="room_number" required>
+      </div>
+      {% endif %}
+      <div class="field">
+        <label>Number of windows</label>
+        <input type="number" name="num_windows" min="0" required value="{{ room.num_windows if room else '' }}">
+      </div>
+      <div class="field">
+        <label>Access type</label>
+        <select name="access_type" required>
+          <option value="elevator" {{ 'selected' if room and room.access_type == 'elevator' }}>Elevator</option>
+          <option value="stairs"   {{ 'selected' if room and room.access_type == 'stairs' }}>Stairs</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Last renovation year</label>
+        <input type="number" name="last_renovation_year" min="1900" max="2100" required value="{{ room.last_renovation_year if room else '' }}">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{{ url_for('manager.rooms') }}" class="btn btn-secondary" style="margin-left:.5rem;">Cancel</a>
+  </form>
+</div>
+{% endblock %}

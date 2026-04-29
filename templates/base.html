@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Hotel System{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #f5f2ee;
+      --surface:  #ffffff;
+      --border:   #e2ddd8;
+      --text:     #1a1714;
+      --muted:    #6b6560;
+      --accent:   #2d5a3d;
+      --accent2:  #c8a96e;
+      --danger:   #8b2e2e;
+      --radius:   10px;
+      --shadow:   0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.05);
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Nav */
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      height: 56px;
+    }
+    .nav-brand { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--text); }
+    .nav-links { display: flex; gap: 1.5rem; flex: 1; }
+    .nav-links a { font-size: .875rem; color: var(--muted); font-weight: 500; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .nav-user { font-size: .8rem; color: var(--muted); }
+
+    /* Layout */
+    .page { max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; margin-bottom: 1.5rem; }
+    h2 { font-size: 1.1rem; font-weight: 500; margin-bottom: 1rem; }
+
+    /* Cards */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+
+    /* Flash messages */
+    .flashes { list-style: none; margin-bottom: 1rem; }
+    .flash { padding: .75rem 1rem; border-radius: var(--radius); font-size: .875rem; margin-bottom: .5rem; }
+    .flash.success { background: #eaf3ee; color: var(--accent); border: 1px solid #b8d9c3; }
+    .flash.error   { background: #f9eaea; color: var(--danger); border: 1px solid #e8c0c0; }
+
+    /* Forms */
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .field { display: flex; flex-direction: column; gap: .35rem; }
+    label { font-size: .8rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    input, select, textarea {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .55rem .75rem;
+      font-family: inherit;
+      font-size: .9rem;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color .15s;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: #fff; }
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .55rem 1.2rem; border-radius: 6px; font-size: .875rem;
+      font-weight: 500; font-family: inherit; cursor: pointer;
+      border: 1px solid transparent; transition: all .15s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #234a31; }
+    .btn-secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+    .btn-secondary:hover { background: var(--bg); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { background: #721f1f; }
+    .btn-sm { padding: .3rem .8rem; font-size: .8rem; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    th { text-align: left; padding: .6rem .75rem; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); border-bottom: 2px solid var(--border); }
+    td { padding: .65rem .75rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg); }
+
+    /* Stat grid */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+    .stat-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: .3rem; }
+    .stat-value { font-family: 'DM Serif Display', serif; font-size: 1.8rem; }
+
+    /* Nav menu groups */
+    .menu-group { display: flex; flex-direction: column; gap: .25rem; margin-bottom: 1rem; }
+    .menu-group-title { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .25rem; }
+    .menu-item { display: block; padding: .5rem .75rem; border-radius: 6px; font-size: .875rem; color: var(--text); }
+    .menu-item:hover { background: var(--bg); text-decoration: none; }
+
+    .badge { display: inline-block; padding: .15rem .5rem; border-radius: 20px; font-size: .75rem; font-weight: 500; }
+    .badge-green { background: #eaf3ee; color: var(--accent); }
+    .badge-amber { background: #fdf4e3; color: #7a5a1e; }
+    .badge-red   { background: #f9eaea; color: var(--danger); }
+  </style>
+</head>
+<body>
+<nav>
+  <span class="nav-brand">&#9962; Hotel System</span>
+  <div class="nav-links">
+    {% if session.role == 'manager' %}
+      <a href="{{ url_for('manager.dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('manager.hotels') }}">Hotels</a>
+      <a href="{{ url_for('manager.rooms') }}">Rooms</a>
+      <a href="{{ url_for('manager.clients') }}">Clients</a>
+      <a href="{{ url_for('manager.hotel_summary') }}">Stats</a>
+    {% elif session.role == 'client' %}
+      <a href="{{ url_for('client.dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('client.search') }}">Search Rooms</a>
+      <a href="{{ url_for('client.autobook') }}">Auto-Book</a>
+      <a href="{{ url_for('client.bookings') }}">My Bookings</a>
+      <a href="{{ url_for('client.reviews') }}">Reviews</a>
+      <a href="{{ url_for('client.profile') }}">Profile</a>
+    {% endif %}
+  </div>
+  {% if session.name %}
+    <span class="nav-user">{{ session.name }} &nbsp;·&nbsp; <a href="{{ url_for('auth.logout') }}">Log out</a></span>
+  {% endif %}
+</nav>
+
+<div class="page">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for cat, msg in messages %}
+          <li class="flash {{ cat }}">{{ msg }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>

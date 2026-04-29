@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Problematic Hotels{% endblock %}
+{% block content %}
+<h1>Problematic Local Hotels</h1>
+<p style="color:var(--muted); margin-top:-.75rem; margin-bottom:1.5rem; font-size:.9rem;">
+  Chicago hotels with avg rating &lt; 2, booked by ≥ 2 clients — none of whom have a Chicago address.
+</p>
+<div class="card" style="padding:0; overflow:hidden;">
+  <table>
+    <thead><tr><th>Hotel</th><th>Avg Rating</th><th>Distinct Clients</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <td>{{ r.name }}</td>
+        <td><span class="badge badge-red">{{ r.avg_rating }} / 10</span></td>
+        <td>{{ r.distinct_clients }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="3" style="color:var(--muted); text-align:center; padding:2rem;">No problematic hotels found.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

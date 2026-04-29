@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Register Client{% endblock %}
+{% block content %}
+<div style="max-width:600px; margin: 3rem auto;">
+  <h1>Create Client Account</h1>
+  <form method="POST">
+    <div class="card">
+      <h2>Account info</h2>
+      <div class="form-grid">
+        <div class="field">
+          <label>Full name</label>
+          <input type="text" name="name" required>
+        </div>
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" name="email" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Your address</h2>
+      <div class="form-grid">
+        <div class="field">
+          <label>Street name</label>
+          <input type="text" name="street_name" required>
+        </div>
+        <div class="field">
+          <label>Street number</label>
+          <input type="text" name="street_number" required>
+        </div>
+        <div class="field">
+          <label>City</label>
+          <input type="text" name="city" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Credit card</h2>
+      <div class="form-grid">
+        <div class="field" style="grid-column:1/-1;">
+          <label>Card number</label>
+          <input type="text" name="card_number" required placeholder="1234-5678-9012-3456">
+        </div>
+        <div class="field" style="grid-column:1/-1;">
+          <p style="font-size:.8rem; color:var(--muted); margin-bottom:.5rem;">Billing address (can be same as above)</p>
+        </div>
+        <div class="field">
+          <label>Street name</label>
+          <input type="text" name="bill_street" required>
+        </div>
+        <div class="field">
+          <label>Street number</label>
+          <input type="text" name="bill_number" required>
+        </div>
+        <div class="field">
+          <label>City</label>
+          <input type="text" name="bill_city" required>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create account</button>
+    <a href="{{ url_for('auth.login') }}" class="btn btn-secondary" style="margin-left:.5rem;">Cancel</a>
+  </form>
+</div>
+{% endblock %}

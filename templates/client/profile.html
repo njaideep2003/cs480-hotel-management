@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<h1>My Profile</h1>
+
+<div class="card" style="max-width:480px;">
+  <h2>Account</h2>
+  <form method="POST" action="{{ url_for('client.profile') }}" style="display:flex; gap:1rem; align-items:flex-end;">
+    <div class="field" style="flex:1;">
+      <label>Name</label>
+      <input type="text" name="name" value="{{ client.name }}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+  <p style="margin-top:.75rem; font-size:.875rem; color:var(--muted);">Email: {{ client.email }}</p>
+</div>
+
+<div class="card">
+  <h2>Addresses</h2>
+  {% if addresses %}
+  <table style="margin-bottom:1rem;">
+    <thead><tr><th>Street</th><th>Number</th><th>City</th><th></th></tr></thead>
+    <tbody>
+    {% for a in addresses %}
+      <tr>
+        <td>{{ a.street_name }}</td>
+        <td>{{ a.street_number }}</td>
+        <td>{{ a.city }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('client.remove_address') }}"
+                onsubmit="return confirm('Remove this address?')">
+            <input type="hidden" name="street_name"   value="{{ a.street_name }}">
+            <input type="hidden" name="street_number" value="{{ a.street_number }}">
+            <input type="hidden" name="city"          value="{{ a.city }}">
+            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  <details>
+    <summary style="cursor:pointer; font-size:.875rem; color:var(--accent);">+ Add address</summary>
+    <form method="POST" action="{{ url_for('client.add_address') }}" style="margin-top:1rem;">
+      <div class="form-grid" style="margin-bottom:.75rem;">
+        <div class="field"><label>Street name</label><input type="text" name="street_name" required></div>
+        <div class="field"><label>Street number</label><input type="text" name="street_number" required></div>
+        <div class="field"><label>City</label><input type="text" name="city" required></div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-sm">Add</button>
+    </form>
+  </details>
+</div>
+
+<div class="card">
+  <h2>Credit Cards</h2>
+  {% if cards %}
+  <table style="margin-bottom:1rem;">
+    <thead><tr><th>Card number</th><th>Billing address</th><th></th></tr></thead>
+    <tbody>
+    {% for c in cards %}
+      <tr>
+        <td>{{ c.card_number }}</td>
+        <td>{{ c.street_number }} {{ c.street_name }}, {{ c.city }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('client.remove_card') }}"
+                onsubmit="return confirm('Remove this card?')">
+            <input type="hidden" name="card_number" value="{{ c.card_number }}">
+            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  <details>
+    <summary style="cursor:pointer; font-size:.875rem; color:var(--accent);">+ Add card</summary>
+    <form method="POST" action="{{ url_for('client.add_card') }}" style="margin-top:1rem;">
+      <div class="form-grid" style="margin-bottom:.75rem;">
+        <div class="field" style="grid-column:1/-1;">
+          <label>Card number</label>
+          <input type="text" name="card_number" required placeholder="1234-5678-9012-3456">
+        </div>
+        <div class="field"><label>Billing street name</label><input type="text" name="street_name" required></div>
+        <div class="field"><label>Billing street number</label><input type="text" name="street_number" required></div>
+        <div class="field"><label>Billing city</label><input type="text" name="city" required></div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-sm">Add</button>
+    </form>
+  </details>
+</div>
+{% endblock %}

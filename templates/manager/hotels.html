@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Hotels{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+  <h1 style="margin:0;">Hotels</h1>
+  <a href="{{ url_for('manager.add_hotel') }}" class="btn btn-primary">+ Add hotel</a>
+</div>
+<div class="card" style="padding:0; overflow:hidden;">
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Address</th><th style="width:140px;"></th></tr>
+    </thead>
+    <tbody>
+    {% for h in hotels %}
+      <tr>
+        <td>{{ h.hotel_id }}</td>
+        <td>{{ h.name }}</td>
+        <td>{{ h.street_number }} {{ h.street_name }}, {{ h.city }}</td>
+        <td>
+          <a href="{{ url_for('manager.edit_hotel', hotel_id=h.hotel_id) }}" class="btn btn-secondary btn-sm">Edit</a>
+          <form method="POST" action="{{ url_for('manager.delete_hotel', hotel_id=h.hotel_id) }}" style="display:inline;"
+                onsubmit="return confirm('Delete hotel {{ h.name }}?')">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="4" style="color:var(--muted); text-align:center; padding:2rem;">No hotels yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

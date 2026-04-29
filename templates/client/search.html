@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Search Rooms{% endblock %}
+{% block content %}
+<h1>Search Available Rooms</h1>
+<div class="card" style="max-width:480px;">
+  <form method="POST" style="display:flex; gap:1rem; align-items:flex-end; flex-wrap:wrap;">
+    <div class="field" style="flex:1; min-width:140px;">
+      <label>Check-in date</label>
+      <input type="date" name="start_date" required value="{{ start }}">
+    </div>
+    <div class="field" style="flex:1; min-width:140px;">
+      <label>Check-out date</label>
+      <input type="date" name="end_date" required value="{{ end }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+</div>
+
+{% if rooms %}
+<div class="card" style="padding:0; overflow:hidden;">
+  <table>
+    <thead>
+      <tr><th>Hotel</th><th>Room #</th><th>Windows</th><th>Access</th><th>Renovated</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for r in rooms %}
+      <tr>
+        <td>{{ r.hotel_name }}</td>
+        <td>{{ r.room_number }}</td>
+        <td>{{ r.num_windows }}</td>
+        <td><span class="badge badge-green">{{ r.access_type }}</span></td>
+        <td>{{ r.last_renovation_year }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('client.book') }}">
+            <input type="hidden" name="hotel_id"    value="{{ r.hotel_id }}">
+            <input type="hidden" name="room_number" value="{{ r.room_number }}">
+            <input type="hidden" name="start_date"  value="{{ start }}">
+            <input type="hidden" name="end_date"    value="{{ end }}">
+            <button type="submit" class="btn btn-primary btn-sm">Book</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% elif start and end %}
+<p style="color:var(--muted);">No rooms available for those dates.</p>
+{% endif %}
+{% endblock %}

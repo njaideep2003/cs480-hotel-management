@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit' if hotel else 'Add' }} Hotel{% endblock %}
+{% block content %}
+<h1>{{ 'Edit' if hotel else 'Add' }} Hotel</h1>
+<div class="card" style="max-width:520px;">
+  <form method="POST">
+    <div class="form-grid" style="margin-bottom:1rem;">
+      {% if not hotel %}
+      <div class="field">
+        <label>Hotel ID</label>
+        <input type="number" name="hotel_id" required>
+      </div>
+      {% endif %}
+      <div class="field" style="{{ '' if hotel else '' }}">
+        <label>Hotel name</label>
+        <input type="text" name="name" required value="{{ hotel.name if hotel else '' }}">
+      </div>
+      <div class="field">
+        <label>Street name</label>
+        <input type="text" name="street_name" required value="{{ hotel.street_name if hotel else '' }}">
+      </div>
+      <div class="field">
+        <label>Street number</label>
+        <input type="text" name="street_number" required value="{{ hotel.street_number if hotel else '' }}">
+      </div>
+      <div class="field">
+        <label>City</label>
+        <input type="text" name="city" required value="{{ hotel.city if hotel else '' }}">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{{ url_for('manager.hotels') }}" class="btn btn-secondary" style="margin-left:.5rem;">Cancel</a>
+  </form>
+</div>
+{% endblock %}

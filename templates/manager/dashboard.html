@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Manager Dashboard{% endblock %}
+{% block content %}
+<h1>Manager Dashboard</h1>
+<p style="color:var(--muted); margin-top:-.75rem; margin-bottom:1.5rem;">Welcome, {{ session.name }}</p>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-label">Management</div>
+    <div style="display:flex; flex-direction:column; gap:.5rem; margin-top:.5rem;">
+      <a href="{{ url_for('manager.hotels') }}" class="menu-item">🏨 Hotels</a>
+      <a href="{{ url_for('manager.rooms') }}"  class="menu-item">🛏 Rooms</a>
+      <a href="{{ url_for('manager.clients') }}" class="menu-item">👤 Clients</a>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Reports</div>
+    <div style="display:flex; flex-direction:column; gap:.5rem; margin-top:.5rem;">
+      <a href="{{ url_for('manager.top_clients') }}"        class="menu-item">🏆 Top clients</a>
+      <a href="{{ url_for('manager.hotel_summary') }}"      class="menu-item">📊 Hotel summary</a>
+      <a href="{{ url_for('manager.city_query') }}"         class="menu-item">🌆 City query</a>
+      <a href="{{ url_for('manager.problematic_hotels') }}" class="menu-item">⚠️ Problematic hotels</a>
+      <a href="{{ url_for('manager.client_spending') }}"    class="menu-item">💰 Client spending</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

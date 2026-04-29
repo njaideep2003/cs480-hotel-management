@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Client Spending{% endblock %}
+{% block content %}
+<h1>Client Spending</h1>
+<div class="card" style="padding:0; overflow:hidden;">
+  <table>
+    <thead><tr><th>Name</th><th>Email</th><th>Total Spent</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <td>{{ r.name }}</td>
+        <td>{{ r.email }}</td>
+        <td>${{ '%.2f' | format(r.total_spent | float) }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="3" style="color:var(--muted); text-align:center; padding:2rem;">No data.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

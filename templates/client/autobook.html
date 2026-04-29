@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Auto-Book{% endblock %}
+{% block content %}
+<h1>Auto-Book a Room</h1>
+<p style="color:var(--muted); margin-top:-.75rem; margin-bottom:1.5rem; font-size:.9rem;">
+  Choose a hotel and date range — we'll automatically assign you an available room.
+</p>
+
+<div class="card" style="max-width:540px;">
+  <form method="POST" style="display:flex; gap:1rem; align-items:flex-end; flex-wrap:wrap;">
+    <div class="field" style="flex:1; min-width:180px;">
+      <label>Hotel</label>
+      <select name="hotel_id" required>
+        {% for h in hotels %}
+          <option value="{{ h.hotel_id }}" {{ 'selected' if request.form.hotel_id == h.hotel_id|string }}>{{ h.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field" style="min-width:140px;">
+      <label>Check-in</label>
+      <input type="date" name="start_date" required value="{{ request.form.start_date or '' }}">
+    </div>
+    <div class="field" style="min-width:140px;">
+      <label>Check-out</label>
+      <input type="date" name="end_date" required value="{{ request.form.end_date or '' }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Auto-book</button>
+  </form>
+</div>
+
+{% if result %}
+<div class="card" style="max-width:480px; border-color:#b8d9c3; background:#eaf3ee;">
+  <h2 style="color:var(--accent);">✓ Booking confirmed!</h2>
+  <p style="margin-top:.5rem; font-size:.9rem;">
+    <strong>Hotel:</strong> {{ result.hotel }}<br>
+    <strong>Room:</strong> {{ result.room }}<br>
+    <strong>Dates:</strong> {{ result.start }} → {{ result.end }}<br>
+    <strong>Booking ID:</strong> #{{ result.booking_id }}
+  </p>
+</div>
+{% endif %}
+
+{% if alternatives %}
+<div class="card" style="max-width:480px;">
+  <h2>Alternative hotels with availability</h2>
+  <ul style="list-style:none; margin-top:.5rem;">
+    {% for a in alternatives %}
+      <li style="padding:.4rem 0; border-bottom:1px solid var(--border); font-size:.9rem;">
+        🏨 {{ a.name }}
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% endblock %}

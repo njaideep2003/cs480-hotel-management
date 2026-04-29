@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Hotel Summary{% endblock %}
+{% block content %}
+<h1>Hotel Summary</h1>
+<div class="card" style="padding:0; overflow:hidden;">
+  <table>
+    <thead><tr><th>Hotel</th><th>Total Bookings</th><th>Avg Rating</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <td>{{ r.name }}</td>
+        <td>{{ r.total_bookings }}</td>
+        <td>
+          {% if r.avg_rating is not none %}
+            {% set rating = r.avg_rating | float %}
+            <span class="badge {{ 'badge-green' if rating >= 7 else ('badge-amber' if rating >= 4 else 'badge-red') }}">
+              {{ r.avg_rating }} / 10
+            </span>
+          {% else %}
+            <span style="color:var(--muted);">No reviews</span>
+          {% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="3" style="color:var(--muted); text-align:center; padding:2rem;">No hotels found.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

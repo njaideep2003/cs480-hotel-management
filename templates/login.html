@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div style="max-width:420px; margin: 4rem auto;">
+  <h1 style="text-align:center; margin-bottom:.5rem;">Welcome back</h1>
+  <p style="text-align:center; color:var(--muted); margin-bottom:2rem; font-size:.9rem;">Hotel Management System</p>
+
+  <div class="card">
+    <form method="POST" action="{{ url_for('auth.login') }}">
+      <div class="field" style="margin-bottom:1rem;">
+        <label>Login as</label>
+        <select name="role" id="role-select" onchange="toggleFields()">
+          <option value="client">Client</option>
+          <option value="manager">Manager</option>
+        </select>
+      </div>
+      <div id="field-email" class="field" style="margin-bottom:1.25rem;">
+        <label>Email address</label>
+        <input type="email" name="email" placeholder="you@example.com">
+      </div>
+      <div id="field-ssn" class="field" style="display:none; margin-bottom:1.25rem;">
+        <label>SSN</label>
+        <input type="text" name="ssn" placeholder="123456789">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Log in</button>
+    </form>
+  </div>
+
+  <p style="text-align:center; font-size:.875rem; color:var(--muted); margin-top:1rem;">
+    New client? <a href="{{ url_for('auth.register_client') }}">Register here</a>
+    &nbsp;·&nbsp;
+    New manager? <a href="{{ url_for('auth.register_manager') }}">Register here</a>
+  </p>
+</div>
+<script>
+function toggleFields() {
+  const role = document.getElementById('role-select').value;
+  document.getElementById('field-email').style.display = role === 'client' ? '' : 'none';
+  document.getElementById('field-ssn').style.display   = role === 'manager' ? '' : 'none';
+}
+</script>
+{% endblock %}

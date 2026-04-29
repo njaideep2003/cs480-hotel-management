@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Register Manager{% endblock %}
+{% block content %}
+<div style="max-width:480px; margin: 3rem auto;">
+  <h1>Register as Manager</h1>
+  <div class="card">
+    <form method="POST">
+      <div class="form-grid" style="margin-bottom:1rem;">
+        <div class="field">
+          <label>SSN</label>
+          <input type="text" name="ssn" required placeholder="123456789">
+        </div>
+        <div class="field">
+          <label>Full name</label>
+          <input type="text" name="name" required>
+        </div>
+        <div class="field" style="grid-column:1/-1;">
+          <label>Email</label>
+          <input type="email" name="email" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Create account</button>
+      <a href="{{ url_for('auth.login') }}" class="btn btn-secondary" style="margin-left:.5rem;">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

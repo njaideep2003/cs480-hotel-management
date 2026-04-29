@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Clients{% endblock %}
+{% block content %}
+<h1>Clients</h1>
+<div class="card" style="padding:0; overflow:hidden;">
+  <table>
+    <thead><tr><th>Name</th><th>Email</th><th style="width:100px;"></th></tr></thead>
+    <tbody>
+    {% for c in clients %}
+      <tr>
+        <td>{{ c.name }}</td>
+        <td>{{ c.email }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('manager.delete_client', email=c.email) }}"
+                onsubmit="return confirm('Remove client {{ c.name }}? This will delete all their bookings and reviews.')">
+            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="3" style="color:var(--muted); text-align:center; padding:2rem;">No clients.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

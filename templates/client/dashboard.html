@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Client Dashboard{% endblock %}
+{% block content %}
+<h1>Welcome, {{ session.name }}</h1>
+<p style="color:var(--muted); margin-top:-.75rem; margin-bottom:1.5rem; font-size:.9rem;">What would you like to do today?</p>
+<div class="stat-grid">
+  <a href="{{ url_for('client.search') }}" class="stat-card" style="text-decoration:none; display:block; cursor:pointer; transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow=''">
+    <div class="stat-label">🔍 Search rooms</div>
+    <p style="font-size:.875rem; color:var(--muted); margin-top:.4rem;">Find available rooms for any date range</p>
+  </a>
+  <a href="{{ url_for('client.autobook') }}" class="stat-card" style="text-decoration:none; display:block; cursor:pointer; transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow=''">
+    <div class="stat-label">⚡ Auto-book</div>
+    <p style="font-size:.875rem; color:var(--muted); margin-top:.4rem;">Pick a hotel and let us find a room</p>
+  </a>
+  <a href="{{ url_for('client.bookings') }}" class="stat-card" style="text-decoration:none; display:block; cursor:pointer; transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow=''">
+    <div class="stat-label">📋 My bookings</div>
+    <p style="font-size:.875rem; color:var(--muted); margin-top:.4rem;">View your upcoming and past stays</p>
+  </a>
+  <a href="{{ url_for('client.reviews') }}" class="stat-card" style="text-decoration:none; display:block; cursor:pointer; transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow=''">
+    <div class="stat-label">⭐ Reviews</div>
+    <p style="font-size:.875rem; color:var(--muted); margin-top:.4rem;">Rate hotels where you've stayed</p>
+  </a>
+  <a href="{{ url_for('client.profile') }}" class="stat-card" style="text-decoration:none; display:block; cursor:pointer; transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow=''">
+    <div class="stat-label">👤 Profile</div>
+    <p style="font-size:.875rem; color:var(--muted); margin-top:.4rem;">Manage addresses and credit cards</p>
+  </a>
+</div>
+{% endblock %}

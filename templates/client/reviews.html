@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Reviews{% endblock %}
+{% block content %}
+<h1>Reviews</h1>
+
+{% if stayed_at %}
+<div class="card" style="max-width:560px;">
+  <h2>Submit a review</h2>
+  <form method="POST" style="margin-top:.5rem;">
+    <div class="form-grid" style="margin-bottom:1rem;">
+      <div class="field" style="grid-column:1/-1;">
+        <label>Hotel</label>
+        <select name="hotel_id" required>
+          {% for h in stayed_at %}
+            <option value="{{ h.hotel_id }}">{{ h.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>Message</label>
+        <textarea name="message" required placeholder="Share your experience..."></textarea>
+      </div>
+      <div class="field">
+        <label>Rating (0–10)</label>
+        <input type="number" name="rating" min="0" max="10" required>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit review</button>
+  </form>
+</div>
+{% else %}
+<p style="color:var(--muted); margin-bottom:1.5rem; font-size:.9rem;">
+  You have no completed stays yet. Reviews can be submitted after check-out.
+</p>
+{% endif %}
+
+{% if my_reviews %}
+<h2 style="margin-bottom:1rem;">Your reviews</h2>
+<div class="card" style="padding:0; overflow:hidden;">
+  <table>
+    <thead><tr><th>Hotel</th><th>Rating</th><th>Message</th></tr></thead>
+    <tbody>
+    {% for r in my_reviews %}
+      <tr>
+        <td>{{ r.hotel_name }}</td>
+        <td>
+          <span class="badge {{ 'badge-green' if r.rating >= 7 else ('badge-amber' if r.rating >= 4 else 'badge-red') }}">
+            {{ r.rating }} / 10
+          </span>
+        </td>
+        <td style="color:var(--muted); font-size:.875rem;">{{ r.message }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

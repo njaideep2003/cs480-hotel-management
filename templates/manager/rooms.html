@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Rooms{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+  <h1 style="margin:0;">Rooms</h1>
+  <a href="{{ url_for('manager.add_room') }}" class="btn btn-primary">+ Add room</a>
+</div>
+<div class="card" style="padding:0; overflow:hidden;">
+  <table>
+    <thead>
+      <tr><th>Hotel</th><th>Room #</th><th>Windows</th><th>Access</th><th>Renovated</th><th>Bookings</th><th style="width:140px;"></th></tr>
+    </thead>
+    <tbody>
+    {% for r in rooms %}
+      <tr>
+        <td>{{ r.hotel_name }}</td>
+        <td>{{ r.room_number }}</td>
+        <td>{{ r.num_windows }}</td>
+        <td><span class="badge badge-green">{{ r.access_type }}</span></td>
+        <td>{{ r.last_renovation_year }}</td>
+        <td>{{ r.booking_count }}</td>
+        <td>
+          <a href="{{ url_for('manager.edit_room', hotel_id=r.hotel_id, room_number=r.room_number) }}" class="btn btn-secondary btn-sm">Edit</a>
+          <form method="POST" action="{{ url_for('manager.delete_room', hotel_id=r.hotel_id, room_number=r.room_number) }}"
+                style="display:inline;" onsubmit="return confirm('Delete this room?')">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7" style="color:var(--muted); text-align:center; padding:2rem;">No rooms yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
